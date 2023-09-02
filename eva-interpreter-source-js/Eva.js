@@ -23,6 +23,28 @@ class Eva {
             return this.eval(exp[1], env) * this.eval(exp[2], env);
         }
 
+        // Comparators:
+
+        if (exp[0] === '>') {
+            return this.eval(exp[1], env) > this.eval(exp[2], env);
+        }
+
+        if (exp[0] === '>=') {
+            return this.eval(exp[1], env) >= this.eval(exp[2], env);
+        }
+
+        if (exp[0] === '<') {
+            return this.eval(exp[1], env) < this.eval(exp[2], env);
+        }
+
+        if (exp[0] === '<=') {
+            return this.eval(exp[1], env) <= this.eval(exp[2], env);
+        }
+
+        if (exp[0] === '=') {
+            return this.eval(exp[1], env) = this.eval(exp[2], env);
+        }
+
         if (exp[0] === 'begin') {
             const blockEnv = new Environment({}, env);
             return this._evalBlock(exp, blockEnv);
@@ -36,6 +58,28 @@ class Eva {
         if (exp[0] === 'var') {
             const [_, name, value] = exp;
             return env.define(name, this.eval(value, env));
+        }
+
+
+        // Control flow
+        if (exp[0] === 'if') {
+            const [_tag, condition, consequent, alternate] = exp;
+            if (this.eval(condition, env)) {
+                return this.eval(consequent, env);
+            } else {
+                return this.eval(alternate, env);
+            }
+        }
+
+
+        if (exp[0] === 'while') {
+            const [_tag, condition, body] = exp;
+            let result;
+            while (this.eval(condition, env)) {
+                result = this.eval(body, env);
+            }
+
+            return result;
         }
 
         if (isVariableName(exp)) {
