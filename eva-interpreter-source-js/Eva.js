@@ -42,7 +42,7 @@ class Eva {
         }
 
         if (exp[0] === '=') {
-            return this.eval(exp[1], env) = this.eval(exp[2], env);
+            return this.eval(exp[1], env) === this.eval(exp[2], env);
         }
 
         if (exp[0] === 'begin') {
@@ -114,5 +114,12 @@ function isString(exp) {
 function isVariableName(exp) {
     return typeof exp === 'string' && /^[+\-*/<>=a-zA-Z0-9_]+$/.test(exp);
 }
+
+const GlobalEnvironment = new Environment({
+    null: null,
+    true: true,
+    false: false,
+    VERSION: '0.1',
+})
 
 module.exports = Eva;
